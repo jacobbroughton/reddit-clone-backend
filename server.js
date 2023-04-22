@@ -25,7 +25,7 @@ let MySQLStore = require("express-mysql-session")(session)
 
 let origin
 if (process.env.NODE_ENV === "production") {
-  origin = "https://zeddit.netlify.app"
+  origin = "https://zeddit.onrender.com"
 } else {
   origin = "http://localhost:3000"
 }
