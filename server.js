@@ -23,6 +23,8 @@ let options = {
 
 let MySQLStore = require("express-mysql-session")(session)
 
+console.log(process.env)
+
 let origin
 if (process.env.NODE_ENV === "production") {
   origin = "https://zeddit.onrender.com"
