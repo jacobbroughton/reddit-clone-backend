@@ -27,7 +27,7 @@ console.log("NODE_ENV", process.env.NODE_ENV)
 
 app.use(
   cors({
-    origin: process.env.NODE_ENV === "production" ? "https://zeddit.onrender.com" : "http://localhost:3000",
+    origin: ["https://zeddit.onrender.com", "https://zeddit.onrender.com/", "http://localhost:3000"],
     credentials: true,
   })
 )
@@ -38,6 +38,7 @@ const fs = require("fs")
 
 // Configuring Passport
 const passport = require("passport")
+const { isAuth } = require("./middleware/authMiddleware")
 let sessionStore = new MySQLStore(options)
 app.use(cookieParser(process.env.cookieSecret))
 app.use(
@@ -71,7 +72,7 @@ app.use(passport.initialize())
 app.use(passport.session())
 
 
-app.get("/", (req, res) => {
+app.get("/", isAuth, (req, res) => {
   res.send("Hello world")
 })
 app.use("/users", userRouter)
