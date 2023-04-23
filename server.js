@@ -23,8 +23,6 @@ let options = {
 
 let MySQLStore = require("express-mysql-session")(session)
 
-console.log("NODE_ENV", process.env.NODE_ENV)
-
 app.use(
   cors({
     origin: ["https://zeddit.onrender.com", "https://zeddit.onrender.com/", "http://localhost:3000"],
@@ -70,7 +68,6 @@ app.use(
 require("./middleware/passportConfig")(passport)
 app.use(passport.initialize())
 app.use(passport.session())
-
 
 app.get("/", isAuth, (req, res) => {
   res.send("Hello world")
