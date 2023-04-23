@@ -53,7 +53,6 @@ router.post("/login", isAuth, (req, res, next) => {
     if (!user) {
       res.status(404).send("Username or password is incorrect")
     } else {
-      console.log("User found", user)
       req.login(user, (err) => {
         if (err) {
           res.status(404).send("User does exist, but there was an error...")
@@ -68,7 +67,6 @@ router.post("/login", isAuth, (req, res, next) => {
 
 // Log Out
 router.post("/logout", isAuth, (req, res, next) => {
-  console.log("logging out " + req.user.username)
   req.logout()
   req.session.destroy((err) => {
     if (err) return next(err)
@@ -93,7 +91,6 @@ router.post(
 
     let { username } = encode(req.body)
 
-    console.log(username)
 
     let searchForUserStatement = `
         SELECT * FROM users 
@@ -108,7 +105,6 @@ router.post(
           .send("Something happened while searching for the user, try again.")
         // throw err
       }
-      console.log(rows)
       if (rows[0]) {
         res.status(404).send("User already exists")
       }
@@ -136,7 +132,6 @@ router.post(
               // throw err
             } else {
               res.send(req.body)
-              console.log("Registered user into database")
             }
           }
         )

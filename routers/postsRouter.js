@@ -13,7 +13,6 @@ router.get("/", isAuth, (req, res) => {
   let { userId } = req.query
 
   subredditName = encode(subredditName)
-  console.log(subredditName)
 
   const getPostsStatement = `
   SELECT p.*, u.username, v.user_id, v.post_id, v.vote_value,
@@ -161,14 +160,10 @@ router.post(
     let { postType, title, body, authorId, subredditId, subredditName } =
       req.body
 
-    console.log(req.body)
-
     title = encode(title)
     body = encode(body)
     subredditName = encode(subredditName)
-
-    console.log(req.body)
-
+    
     const createPostStatement = `
   INSERT INTO posts
   (post_type, title, body, author_id, subreddit_id, subreddit_name) 
