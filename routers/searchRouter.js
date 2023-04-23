@@ -3,7 +3,7 @@ const router = express.Router()
 const db = require("../db")
 const { isAuth } = require("../middleware/authMiddleware")
 
-router.get("/", isAuth, (req, res) => {
+router.get("/", (req, res) => {
   let { userId, subredditName, q } = req.query
 
   if (userId === "null" || userId === "undefined") userId = null

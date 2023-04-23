@@ -44,7 +44,7 @@ router.get(
 )
 
 // Log In
-router.post("/login", isAuth, (req, res, next) => {
+router.post("/login",  (req, res, next) => {
   passport.authenticate("local", (err, user, info) => {
     if (err) {
       res.status(404).send("Error while logging in, please try again.")
@@ -77,7 +77,6 @@ router.post("/logout", isAuth, (req, res, next) => {
 // Register
 router.post(
   "/register",
-  isAuth,
   [
     check("username").notEmpty().withMessage("Username cannot be empty").trim(),
     check("gender").notEmpty().withMessage("Gender cannot be empty").trim(),

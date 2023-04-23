@@ -44,7 +44,7 @@ router.get("/:name", isAuth, [param("name")], (req, res) => {
 })
 
 // Get all subreddits
-router.get("/", isAuth, (req, res) => {
+router.get("/",  (req, res) => {
   try {
     db.query("SELECT * FROM subreddits", (err, rows) => {
       res.send(rows)

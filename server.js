@@ -4,24 +4,18 @@ const app = express()
 const cookieParser = require("cookie-parser")
 const bodyParser = require("body-parser")
 const session = require("express-session")
+const { isAuth } = require("./middleware/authMiddleware")
+const passport = require("passport")
 require("dotenv").config()
 
-const userRouter = require("./routers/userRouter")
-const postsRouter = require("./routers/postsRouter")
-const subredditsRouter = require("./routers/subredditsRouter")
-const commentsRouter = require("./routers/commentsRouter")
-const votesRouter = require("./routers/votesRouter")
-const searchRouter = require("./routers/searchRouter")
-
-let options = {
+let MySQLStore = require("express-mysql-session")(session)
+let sessionStore = new MySQLStore({
   host: process.env.DB_HOST,
   user: process.env.DB_USERNAME,
   password: process.env.DB_PASSWORD,
   database: process.env.DB_DATABASE,
   port: process.env.DB_PORT,
-}
-
-let MySQLStore = require("express-mysql-session")(session)
+})
 
 app.use(
   cors({
@@ -29,28 +23,11 @@ app.use(
     credentials: true,
   })
 )
-app.use(bodyParser.json())
-app.use(bodyParser.urlencoded({ extended: false }))
-
-const fs = require("fs")
-
-// Configuring Passport
-const passport = require("passport")
-const { isAuth } = require("./middleware/authMiddleware")
-let sessionStore = new MySQLStore(options)
-app.use(cookieParser(process.env.cookieSecret))
+app.use(cookieParser(process.env.cookieSecret));
+app.use(express.json()); // parsing the incoming data
+app.use(express.urlencoded({ extended: true })); // parsing the incoming data
 app.use(
   session({
-    // ! Below is backup that works on every browser
-    // secret: `${process.env.cookieSecret}`,
-    // resave: false,
-    // saveUninitialized: true,
-    // store: sessionStore,
-    // cookie: {
-    //   secure: false,
-    //   maxAge: 1000 * 60 * 60 * 24,
-    // },
-
     store: sessionStore,
     secret: process.env.cookieSecret,
     proxy: true,
@@ -69,34 +46,15 @@ require("./middleware/passportConfig")(passport)
 app.use(passport.initialize())
 app.use(passport.session())
 
-app.get("/", isAuth, (req, res) => {
-  res.send("Hello world")
-})
-app.use("/users", userRouter)
-app.use("/posts", postsRouter)
-app.use("/subreddits", subredditsRouter)
-app.use("/comments", commentsRouter)
-app.use("/votes", votesRouter)
-app.use("/search", searchRouter)
+app.get("/", isAuth, (req, res) => res.send("Hello world"))
+app.use("/users", require("./routers/userRouter"))
+app.use("/posts", require("./routers/postsRouter"))
+app.use("/subreddits", require("./routers/subredditsRouter"))
+app.use("/comments", require("./routers/commentsRouter"))
+app.use("/votes", require("./routers/votesRouter"))
+app.use("/search", require("./routers/searchRouter"))
 
-// const pathToIndex = path.join(__dirname, "client/build", "index.html")
-// console.log(pathToIndex)
-// app.get("/", (req, res) => {
-//   const raw = fs.readFileSync(pathToIndex).toString()
-//   const pageTitle = "Home - Zeddit"
-//   const updated = raw.replace('__PAGE_META__', `<title>${pageTitle}</title>`)
-//   console.log(updated)
-//   res.send(updated)
-// })
-
-// if (process.env.NODE_ENV === 'production') {
-//   app.use(express.static(path.join(__dirname, "client/build")))
-//   app.get("*", (req, res) =>
-//     res.sendFile(path.join(__dirname, "client/build/index.html"))
-//   )
-// }
-
-const port = process.env.PORT || 6000
+const port = process.env.PORT || 5001
 
 app.listen(port, () =>
   console.log(

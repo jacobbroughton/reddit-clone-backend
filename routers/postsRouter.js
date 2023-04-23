@@ -7,7 +7,7 @@ const { encode } = require("html-entities")
 const { isAuth } = require("../middleware/authMiddleware")
 
 // Get all posts
-router.get("/", isAuth, (req, res) => {
+router.get("/", (req, res) => {
 
   let subredditName = req.query.filters
   let { userId } = req.query
