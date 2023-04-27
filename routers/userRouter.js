@@ -53,15 +53,15 @@ router.post("/login", (req, res, next) => {
     }
     if (!user) {
       res.statusMessage = "Username or password is incorrect"
-      res.status(401).send({exampleObject: "hello"})
+      res.status(401).send({message: "Username or password is incorrect"})
     } else {
       req.login(user, (err) => {
         if (err) {
           res.statusMessage = "User does exist, but there was an error..."
-          res.status(404).end()
+          res.status(404).send({message: "User does exist, but there was an error..."})
         } else {
           res.statusMessage = "Successfully authenticated";
-          res.status(200).send(user)
+          res.status(200).send({message: "Successfully authenticated"})
         }
       })
     }
