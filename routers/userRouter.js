@@ -60,8 +60,9 @@ router.post("/login", (req, res, next) => {
           res.statusMessage = "User does exist, but there was an error..."
           res.status(404)
         } else {
+          console.log("Gets here boii")
           res.statusMessage = "Successfully authenticated";
-          res.status(200)
+          res.status(200).send(user)
         }
       })
     }
@@ -106,7 +107,8 @@ router.post(
         res.status(404)
       }
       if (rows[0]) {
-        res.status(404).send("User already exists")
+        res.statusMessage = "User already exists"
+        res.status(404)
       }
       if (!rows[0]) {
         let { username, gender, profilePicture, updatedAt } = req.body
@@ -128,8 +130,8 @@ router.post(
           [username, hashedPassword, gender, profilePicture, updatedAt],
           (err) => {
             if (err) {
-              res.status(404).send("Error while registering, please try again.")
-              // throw err
+              res.statusMessage = "Error while registering, please try again."
+              res.status(404)
             } else {
               res.send(req.body)
             }
