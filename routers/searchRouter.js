@@ -12,13 +12,12 @@ router.get("/", (req, res) => {
 
   let searchStatement = `
   SELECT p.*, u.username, v.user_id, v.post_id, v.vote_value,
-  ${
-    userId
+  ${userId
       ? `(
     SELECT vote_value FROM post_votes WHERE post_votes.post_id = p.id AND post_votes.user_id = ${userId} LIMIT 1
   ) AS has_voted,`
       : ""
-  } 
+    } 
   COALESCE(SUM(v.vote_value), 0) AS vote_count
   FROM posts AS p
   INNER JOIN users AS u ON p.author_id = u.id 
@@ -53,10 +52,8 @@ router.get("/", (req, res) => {
   // db.query(searchStatement, [userId, q, q, subredditName, subredditName, subredditName], (err, result) => {
   db.query(searchStatement, [q, q], (err, result) => {
     if (err) {
-      res
-        .status(404)
-        .send("An issue came up during your search, please try again.")
-      // throw err
+      res.statusMessage = "An issue came up during your search, please try again."
+      res.status(404)
     } else {
       res.send(result)
     }

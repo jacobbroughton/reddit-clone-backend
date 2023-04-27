@@ -35,10 +35,8 @@ router.post(
       [body, author_id, post_id, parent_comment],
       (err, result) => {
         if (err) {
-          res
-            .status(404)
-            .send("There was an error adding your comment, please try again.")
-          // throw err
+          res.statusMessage = "There was an error adding your comment, please try again."
+          res.status(404)
         } else {
           res.send(result)
         }
@@ -70,7 +68,8 @@ router.put(
 
     db.query(editCommentStatement, [body, commentId], (err, result) => {
       if (err) {
-        res.status(404).send("Unable to edit this comment")
+        res.statusMessage = "Unable to edit this comment";
+        res.status(404)
         // throw err
       } else {
         res.send(result)
@@ -103,10 +102,9 @@ router.get("/:postId", isAuth, [param("postId").isNumeric()], (req, res) => {
 
   db.query(getCommentsStatement, [postId], (err, rows) => {
     if (err) {
+      res.statusMessage = "There was getting the comments for this post, please try again."
       res
         .status(404)
-        .send("There was getting the comments for this post, please try again.")
-      // throw err
     } else {
       res.send(rows)
     }
@@ -129,10 +127,8 @@ router.delete("/", isAuth, [check("id").isNumeric()], (req, res) => {
 
   db.query(deleteCommentStatement, [id], (err, result) => {
     if (err) {
-      res
-        .status(404)
-        .send("There was an error deleting your comment, please try again.")
-      // throw err
+      res.statusMessage = "There was an error deleting your comment, please try again."
+      res.status(404)
     } else {
       res.send(result)
     }

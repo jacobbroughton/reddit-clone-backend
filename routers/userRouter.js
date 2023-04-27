@@ -34,8 +34,8 @@ router.get(
 
     db.query(searchForUserStatement, [username], (err, rows) => {
       if (err) {
-        res.status(404).send("Could not find user")
-        // throw err
+        res.statusMessage = "Could not find user"
+        res.status(404)
       } else {
         res.send(rows[0])
       }
@@ -44,21 +44,24 @@ router.get(
 )
 
 // Log In
-router.post("/login",  (req, res, next) => {
+router.post("/login", (req, res, next) => {
   passport.authenticate("local", (err, user, info) => {
     if (err) {
-      res.status(404).send("Error while logging in, please try again.")
+      res.statusMessage = "Error while logging in, please try again."
+      res.status(404)
       // throw err
     }
     if (!user) {
-      res.status(404).send("Username or password is incorrect")
+      res.statusMessage = "Username or password is incorrect"
+      res.status(401).end()
     } else {
       req.login(user, (err) => {
         if (err) {
-          res.status(404).send("User does exist, but there was an error...")
-          // throw err
+          res.statusMessage = "User does exist, but there was an error..."
+          res.status(404)
         } else {
-          res.send("Successfully authenticated")
+          res.statusMessage = "Successfully authenticated";
+          res.status(200)
         }
       })
     }
@@ -99,10 +102,8 @@ router.post(
 
     db.query(searchForUserStatement, [username], async (err, rows) => {
       if (err) {
-        res
-          .status(404)
-          .send("Something happened while searching for the user, try again.")
-        // throw err
+        res.statusMessage = "Something happened while searching for the user, try again."
+        res.status(404)
       }
       if (rows[0]) {
         res.status(404).send("User already exists")
