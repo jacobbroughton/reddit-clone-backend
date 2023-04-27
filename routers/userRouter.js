@@ -58,7 +58,7 @@ router.post("/login", (req, res, next) => {
       req.login(user, (err) => {
         if (err) {
           res.statusMessage = "User does exist, but there was an error..."
-          res.status(404)
+          res.status(404).end()
         } else {
           console.log("Gets here boii")
           res.statusMessage = "Successfully authenticated";
