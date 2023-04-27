@@ -53,8 +53,7 @@ router.post(
       [userId, typeId, value, value],
       (err, result) => {
         if (err) {
-          res.statusMessage = "Oops, your vote is not working"
-          res.status(404)
+          res.status(404).send({ message: "Oops, your vote is not working" })
         } else {
           res.send(result)
         }

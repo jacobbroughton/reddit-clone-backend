@@ -1,7 +1,8 @@
 const mysql = require("mysql")
 require("dotenv").config()
 
-const connection = mysql.createConnection({
+const pool = mysql.createPool({
+  connectionLimit: 10,
   host: process.env.DB_HOST,
   user: process.env.DB_USERNAME,
   password: process.env.DB_PASSWORD,
@@ -11,12 +12,12 @@ const connection = mysql.createConnection({
   timezone: "UTC",
 })
 
-connection.connect((err) => {
+pool.getConnection((err, conn) => {
   if (err) {
     console.log("Unable to make db connection")
     throw err
   }
-  // console.log("DB Connection made", connection)
+  console.log("Connection made")
 })
 
-module.exports = connection
+module.exports = pool

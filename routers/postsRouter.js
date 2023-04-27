@@ -32,9 +32,8 @@ router.get("/", (req, res) => {
 
   db.query(getPostsStatement, (err, rows) => {
     if (err) {
-      res.statusMessage = "There was an error fetching the posts, please try again."
       res
-        .status(404)
+        .status(404).send({ message: "There was an error fetching the posts, please try again." })
     } else {
       res.send(rows)
     }
@@ -74,9 +73,8 @@ router.get(
 
     db.query(getSinglePostStatement, [postId], (err, rows) => {
       if (err) {
-        res.statusMessage = "There was an error fetching this post, please try again."
         res
-          .status(404)
+          .status(404).send({ message: "There was an error fetching this post, please try again." })
       } else {
         res.send(rows[0])
       }
@@ -112,13 +110,11 @@ router.put(
 
     db.query(updatePostBodyStatement, [body, postId], (err) => {
       if (err) {
-        res.statusMessage = "There was an error updating this post, please try again."
-        res.status(404)
+        res.status(404).send({ message:  "There was an error updating this post, please try again."})
       }
       db.query(getSinglePostStatement, [postId], (err, rows) => {
         if (err) {
-          res.statusMessage = "There was an error fetching the updated post, please try again."
-          res.status(404)
+          res.status(404).send({ message: "There was an error fetching the updated post, please try again." })
         } else {
           res.send(rows[0])
         }
@@ -167,8 +163,7 @@ router.post(
       [postType, title, body, authorId, subredditId, subredditName],
       (err, result) => {
         if (err) {
-          res.statusMessage = "There was an error creating the post, please try again."
-          res.status(404)
+          res.status(404).send({ message: "There was an error creating the post, please try again." })
         } else {
           res.send(result)
         }
@@ -203,8 +198,7 @@ router.delete(
 
     db.query(deletePostStatement, [id], (err, result) => {
       if (err) {
-        res.statusMessage = "There was an error deleting the post, please try again."
-        res.status(404)
+        res.status(404).send({ message: "There was an error deleting the post, please try again." })
       } else {
         res.send(result)
       }

@@ -34,8 +34,7 @@ router.get(
 
     db.query(searchForUserStatement, [username], (err, rows) => {
       if (err) {
-        res.statusMessage = "Could not find user"
-        res.status(404)
+        res.status(404).send({ message: "Could not find user" })
       } else {
         res.send(rows[0])
       }
@@ -47,21 +46,16 @@ router.get(
 router.post("/login", (req, res, next) => {
   passport.authenticate("local", (err, user, info) => {
     if (err) {
-      res.statusMessage = "Error while logging in, please try again."
-      res.status(404)
-      // throw err
+      res.status(404).send({ message: "Error while logging in, please try again." })
     }
     if (!user) {
-      res.statusMessage = "Username or password is incorrect"
-      res.status(401).send({message: "Username or password is incorrect"})
+      res.status(401).send({ message: "Username or password is incorrect" })
     } else {
       req.login(user, (err) => {
         if (err) {
-          res.statusMessage = "User does exist, but there was an error..."
-          res.status(404).send({message: "User does exist, but there was an error..."})
+          res.status(404).send({ message: "User does exist, but there was an error..." })
         } else {
-          res.statusMessage = "Successfully authenticated";
-          res.status(200).send({message: "Successfully authenticated"})
+          res.status(200).send({ message: "Successfully authenticated" })
         }
       })
     }
@@ -102,12 +96,10 @@ router.post(
 
     db.query(searchForUserStatement, [username], async (err, rows) => {
       if (err) {
-        res.statusMessage = "Something happened while searching for the user, try again."
-        res.status(404)
+        res.status(404).send({ message: "Something happened while searching for the user, try again." })
       }
       if (rows[0]) {
-        res.statusMessage = "User already exists"
-        res.status(404)
+        res.status(404).send({ message: "User already exists" })
       }
       if (!rows[0]) {
         let { username, gender, profilePicture, updatedAt } = req.body
@@ -129,8 +121,7 @@ router.post(
           [username, hashedPassword, gender, profilePicture, updatedAt],
           (err) => {
             if (err) {
-              res.statusMessage = "Error while registering, please try again."
-              res.status(404)
+              res.status(404).send({ message: "Error while registering, please try again." })
             } else {
               res.send(req.body)
             }

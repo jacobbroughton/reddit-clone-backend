@@ -24,16 +24,14 @@ router.get("/:name", isAuth, [param("name")], (req, res) => {
 
     db.query(getSingleSubredditStatement, [name], (err, rows) => {
       if (err) {
-        res.statusMessage = "There was an error fetching this subreddit, please try a different one."
         res
-          .status(404)
+          .status(404).send({ message: "There was an error fetching this subreddit, please try a different one." })
       } else {
         res.send(rows[0])
       }
     })
   } catch (error) {
-    res.statusMessage = "There was an error fetching this subreddit, please try a different one."
-    res.status(404)
+    res.status(404).send({ message: "There was an error fetching this subreddit, please try a different one." })
   }
 })
 
@@ -44,8 +42,7 @@ router.get("/", (req, res) => {
       res.send(rows)
     })
   } catch (e) {
-    res.statusMessage = "There was an issue fetching subreddits, please try again"
-    res.status(404)
+    res.status(404).send({ message: "There was an issue fetching subreddits, please try again" })
   }
 })
 
@@ -82,8 +79,7 @@ router.post(
         [userId, name, description],
         (err, results) => {
           if (err) {
-            res.statusMessage = "A subreddit with this name already exists"
-            res.status(404)
+            res.status(404).send({ message: "A subreddit with this name already exists" })
 
             // throw err
           } else {
@@ -92,8 +88,7 @@ router.post(
         }
       )
     } catch (e) {
-      res.statusMessage = "A subreddit with this name already exists"
-      res.status(404)
+      res.status(404).send({ message: "A subreddit with this name already exists" })
     }
   }
 )
@@ -138,16 +133,14 @@ router.delete(
         [userId, subredditId],
         (err, results) => {
           if (err) {
-            res.statusMessage = "Unable to delete subreddit, please try again."
-            res.status(404)
+            res.status(404).send({ message: "Unable to delete subreddit, please try again." })
           } else {
             res.send(results)
           }
         }
       )
     } catch (error) {
-      res.statusMessage = "Unable to delete subreddit, please try again."
-      res.status(404)
+      res.status(404).send({ message: "Unable to delete subreddit, please try again." })
     }
   }
 )

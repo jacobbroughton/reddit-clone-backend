@@ -52,8 +52,7 @@ router.get("/", (req, res) => {
   // db.query(searchStatement, [userId, q, q, subredditName, subredditName, subredditName], (err, result) => {
   db.query(searchStatement, [q, q], (err, result) => {
     if (err) {
-      res.statusMessage = "An issue came up during your search, please try again."
-      res.status(404)
+      res.status(404).send({ message: "An issue came up during your search, please try again." })
     } else {
       res.send(result)
     }
