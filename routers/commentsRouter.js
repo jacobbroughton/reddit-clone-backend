@@ -77,7 +77,7 @@ router.put(
 )
 
 // Get all comments for a post
-router.get("/:postId", isAuth, [param("postId").isNumeric()], (req, res) => {
+router.get("/:postId", [param("postId").isNumeric()], (req, res) => {
   const { userId } = req.query
   const { postId } = req.params
 

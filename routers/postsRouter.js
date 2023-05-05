@@ -44,7 +44,6 @@ router.get("/", (req, res) => {
 // Get single post
 router.get(
   "/single/:postId/:userId?",
-  isAuth,
   [param("postId").notEmpty().isNumeric()],
   (req, res) => {
     const validatorFailed = checkForErrors(req, res)

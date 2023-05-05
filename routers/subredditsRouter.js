@@ -7,7 +7,7 @@ const db = require("../db")
 const { isAuth } = require("../middleware/authMiddleware")
 
 // Get single subreddit
-router.get("/:name", isAuth, [param("name")], (req, res) => {
+router.get("/:name", [param("name")], (req, res) => {
   const validatorFailed = checkForErrors(req, res)
 
   if (validatorFailed) return
