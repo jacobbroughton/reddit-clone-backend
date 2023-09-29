@@ -98,6 +98,8 @@ router.get("/:postId", [param("postId").isNumeric()], (req, res) => {
     ORDER BY c.id DESC
   `
 
+  console.log(getCommentsStatement)
+
   db.query(getCommentsStatement, [postId], (err, rows) => {
     if (err) {
       res.status(404).send({ message: "There was getting the comments for this post, please try again." })
