@@ -19,7 +19,7 @@ let sessionStore = new MySQLStore({
 
 app.use(
   cors({
-    origin: ["api.zedditapp.com", "api.zedditapp.com/", "http://localhost:3000", "https://jacobbroughton.com", "https://www.jacobbroughton.com"],
+    origin: ["api.zedditapp.com", "api.zedditapp.com/", "http://localhost:3000", "https://zedditapp.com", "https://www.zedditapp.com"],
     credentials: true,
   })
 )
